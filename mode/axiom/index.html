@@ -29,48 +29,32 @@
     <div><textarea id="code" name="code">
 -- Literals
 1234
-0.0e101
-.123
-0b01010011100
-0o01234567
-0x0987654321abcdef
-7
+0.1E101
 2147483647
-3L
-79228162514264337593543950336L
-0x100000000L
 79228162514264337593543950336
-0xdeadbeef
-3.14j
-10.j
-10j
-.001j
-1e100j
-3.14e-10j
-
+3.14
+10.
+10
+.001
+1e100
+3.14e-10
 
 -- String Literals
-'For\''
-"God\""
-"""so loved
-the world"""
-'''that he gave
-his only begotten\' '''
-'that whosoever believeth \
-in him'
-''
+"xxx_
+yyy"
+'xxx
 
-# Identifiers
+-- Identifiers
 a.b
 a.b.c
 
 --Unicode identifiers
-# a = x\ddot
+-- a = x\ddot
 a⃗ = ẍ
-# a = v\dot
+-- a = v\dot
 a⃗ = v̇
 
-#F\vec = m \cdot a\vec
+-- F\vec = m \cdot a\vec
 F⃗ = m•a⃗ 
 
 -- Operators
@@ -78,23 +62,20 @@ F⃗ = m•a⃗
 == != <= >= <> << >> // **
 and or not in is
 
-#infix matrix multiplication operator (PEP 465)
-A @ B
-
 -- Delimiters
-() [] {} , : ` = ; @ .
+() [] {} , : = ; @ .
 += -= *= /= %= &= |= ^=
 //= >>= <<= **=
 
 -- Keywords
-as assert break class continue def del elif else except
-finally for from global if import lambda pass raise
-return try while yield
+break continue else
+for from if import
+repeat return then while
 
 -- Types
-Boolean classmethod Complex enumerate Float frozenset int list object
-property reversed set slice staticmethod str super tuple type
-bytearray bytes filter map memoryview open range zip
+Boolean Complex Float Integer List
+Set String Tuple Type
+OneDimensionalArray
 
 -- Some Example code
 m := new(8, 8, 0)$TwoDimensionalArray(Integer);

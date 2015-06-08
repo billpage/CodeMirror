@@ -28,10 +28,10 @@
                         "Integer", "IntegerMod", "INT", "len","List",
                         "map", "map!", "max", "min", "next",
                         "new", "NonNegativeInteger",
-                        "oneDimensionalArray", "output",
+                        "OneDimensionalArray", "output",
                         "Polynomial", "PositiveInteger", "PrimeField", "print",
-                        "Ring", "Record", "rest", "round",
-                        "Stream", "String", "sum", "Symbol",
+                        "Ring", "Record", "rem", "rest", "round",
+                        "Set", "Stream", "String", "sum", "Symbol",
                         "true", "Tuple", "TwoDimensionalArray","Type",
                         "Union", "Vector", "vector", "zip",
                         "#", "%e", "%i", "%infinity", "%minusInfinity", "%pi", "%plusInfinity"];
@@ -61,7 +61,7 @@
     if(parserConf.extra_builtins != undefined){
       myBuiltins = myBuiltins.concat(parserConf.extra_builtins);
     }
-    var stringPrefixes = new RegExp("['\"]", "i");
+    var stringPrefixes = new RegExp("[\"]", "i");
     var keywords = wordRegexp(myKeywords);
     var builtins = wordRegexp(myBuiltins);
 
@@ -100,17 +100,17 @@
       if (stream.match(/^[0-9\.]/, false)) {
         var floatLiteral = false;
         // Floats
-        if (stream.match(/^\d*\.\d+(e[\+\-]?\d+)?/i)) { floatLiteral = true; }
-        if (stream.match(/^\d+\.\d*/)) { floatLiteral = true; }
+        if (stream.match(/^\d*\.\d+(E[\+\-]?\d+)?/i)) { floatLiteral = true; }
+        if (stream.match(/^\d+\.\d+/)) { floatLiteral = true; }
         if (stream.match(/^\.\d+/)) { floatLiteral = true; }
+        if (floatLiteral) {
+          return "number";
+        }
         // Integers
         var intLiteral = false;
         // Hex
-        if (stream.match(/^0x[0-9a-f]+/i)) intLiteral = true;
         // Binary
-        if (stream.match(/^0b[01]+/i)) intLiteral = true;
         // Octal
-        if (stream.match(/^0o[0-7]+/i)) intLiteral = true;
         // Decimal
         if (stream.match(/^[1-9]\d*(e[\+\-]?\d+)?/)) {
           intLiteral = true;
@@ -118,8 +118,6 @@
         // Zero by itself with no other piece of number.
         if (stream.match(/^0(?![\dx])/i)) intLiteral = true;
         if (intLiteral) {
-          // Integer literals may be "long"
-          stream.eat(/L/i);
           return "number";
         }
       }
@@ -169,8 +167,8 @@
 
       function tokenString(stream, state) {
         while (!stream.eol()) {
-          stream.eatWhile(/[^'"\\]/);
-          if (stream.eat("\\")) {
+          stream.eatWhile(/[^"_]/);
+          if (stream.eat("_")) {
             stream.next();
             if (singleline && stream.eol())
               return OUTCLASS;
@@ -178,7 +176,7 @@
             state.tokenize = tokenBase;
             return OUTCLASS;
           } else {
-            stream.eat(/['"]/);
+            stream.eat(/["]/);
           }
         }
         if (singleline) {
@@ -218,11 +216,11 @@
       var style = state.tokenize(stream, state);
       var current = stream.current();
 
-      // Handle '.' connected identifiers
+      // Handle "." connected identifiers
       if (current == "." && stream.peek()!=".") {
         style = stream.match(identifiers, false) ? null : ERRORCLASS;
         if (style == null && state.lastStyle == "meta") {
-          // Apply 'meta' style to '.' connected identifiers when
+          // Apply "meta" style to "." connected identifiers when
           // appropriate.
           style = "meta";
         }
@@ -309,7 +307,6 @@
           return scope.offset;
       },
 
-      closeBrackets: {triples: "'\""},
       lineComment: "--",
       fold: "indent"
     };
